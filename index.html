@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hollowlamp Studios</title>
+<meta name="description" content="Hollowlamp Studios is an independent game studio, makers of Gloomvein, an idle mining RPG for Android.">
+<meta name="theme-color" content="#0a1517">
+<meta name="color-scheme" content="dark">
+<link rel="canonical" href="https://hollowlampstudios.github.io/">
+<link rel="icon" href="img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="img/icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Hollowlamp Studios">
+<meta property="og:title" content="Hollowlamp Studios">
+<meta property="og:description" content="Small studio. Deep worlds. Makers of Gloomvein, an idle mining RPG for Android.">
+<meta property="og:url" content="https://hollowlampstudios.github.io/">
+<meta property="og:image" content="https://hollowlampstudios.github.io/img/share.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="fonts/eb-garamond.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="img/wordmark.webp" as="image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"Hollowlamp Studios","url":"https://hollowlampstudios.github.io/","email":"hollowlampstudios@gmail.com","logo":"https://hollowlampstudios.github.io/img/icon-192.png"}
+</script>
+<style>
+@font-face { font-family: "EB Garamond"; font-style: normal; font-weight: 400 800; font-display: swap; src: url(fonts/eb-garamond.woff2) format("woff2"); }
+@font-face { font-family: "EB Garamond"; font-style: italic; font-weight: 400 800; font-display: swap; src: url(fonts/eb-garamond-italic.woff2) format("woff2"); }
+
+:root {
+  /* colours taken from the painting */
+  --night: #0a1517;
+  --deep: #102226;
+  --moss: #1d3836;
+  --parchment: #efe4cc;
+  --fog: #a3b5ae;
+  --amber: #f2b45a;
+  --gold: #c99a52;
+  --serif: "EB Garamond", Garamond, "Times New Roman", serif;
+  --gutter: clamp(16px, 5vw, 72px);
+  /* where the lantern hangs in each painting (object-position keeps it there at any screen shape) */
+  --lx: 50%;
+  --ly: 43.6%;
+}
+@media (max-aspect-ratio: 1/1) { :root { --ly: 62%; } }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body { overflow-x: clip; }
+body {
+  margin: 0;
+  background: var(--night);
+  color: var(--parchment);
+  font: 400 1.25rem/1.6 var(--serif);
+  font-variant-numeric: oldstyle-nums;
+  -webkit-font-smoothing: antialiased;
+}
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--amber); outline-offset: 4px; border-radius: 2px; }
+.skip { position: absolute; left: -999px; top: 8px; z-index: 20; background: var(--parchment); color: var(--night); padding: .5em 1em; }
+.skip:focus { left: 8px; }
+
+/* ---------- Intro: the painting, and (where the browser can) a slow walk into the hollow ---------- */
+.intro { position: relative; height: 100svh; padding: 0; }
+.stage { position: sticky; top: 0; height: 100svh; overflow: hidden; background: var(--night); }
+.art { position: absolute; inset: 0; transform-origin: var(--lx) var(--ly); }
+.art img { width: 100%; height: 100%; max-width: none; object-fit: cover; object-position: var(--lx) var(--ly); }
+.lamp {
+  position: absolute; left: var(--lx); top: var(--ly);
+  width: clamp(220px, 34vmin, 420px); aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgba(255, 196, 110, .55), rgba(242, 160, 70, .18) 45%, rgba(242, 160, 70, 0) 100%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: flicker 5.7s ease-in-out infinite;
+}
+.fly {
+  position: absolute; width: 4px; height: 4px; border-radius: 50%;
+  background: #ffe39a;
+  box-shadow: 0 0 6px 2px rgba(255, 210, 110, .7), 0 0 18px 6px rgba(255, 190, 90, .25);
+  animation: drift var(--t, 11s) ease-in-out var(--d, 0s) infinite alternate, blink calc(var(--t, 11s) / 3) ease-in-out var(--d, 0s) infinite;
+  opacity: 0;
+}
+.shade {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgba(10, 21, 23, .78) 0%, rgba(10, 21, 23, .35) 26%, rgba(10, 21, 23, 0) 42%),
+    linear-gradient(to top, rgba(10, 21, 23, .85) 0%, rgba(10, 21, 23, 0) 22%);
+}
+.veil { position: absolute; inset: 0; background: var(--night); opacity: 0; pointer-events: none; }
+
+.title {
+  position: absolute; left: 0; right: 0; top: clamp(84px, 11.5svh, 130px);
+  display: flex; flex-direction: column; align-items: center;
+  padding: 0 var(--gutter);
+  text-align: center;
+}
+.title h1 { margin: 0; width: min(56vw, 700px); }
+.title h1 img { width: 100%; filter: drop-shadow(0 4px 18px rgba(0, 0, 0, .55)); }
+.motto {
+  margin: clamp(12px, 2vh, 22px) 0 0;
+  font-style: italic; font-size: clamp(1.2rem, 2vw, 1.55rem);
+  color: var(--parchment);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .8);
+  letter-spacing: .01em;
+}
+.cue {
+  position: absolute; left: 50%; bottom: clamp(18px, 4svh, 40px); transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  font-style: italic; font-size: 1.05rem; color: var(--fog);
+  text-decoration: none;
+}
+.cue::after { content: ""; width: 1px; height: 38px; background: linear-gradient(var(--amber), transparent); animation: cue 2.6s ease-in-out infinite; transform-origin: top; }
+
+.top {
+  position: absolute; inset: 0 0 auto 0; z-index: 5;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px var(--gutter);
+}
+.top .badge { display: block; width: 48px; height: 48px; border-radius: 50%; }
+.top .badge img { width: 48px; height: 48px; filter: drop-shadow(0 2px 8px rgba(0, 0, 0, .6)); }
+.top nav { display: flex; gap: clamp(20px, 3.4vw, 44px); font-size: 1.15rem; }
+.top nav a { text-decoration: none; color: var(--parchment); opacity: .85; text-shadow: 0 1px 8px rgba(0, 0, 0, .9); transition: opacity .2s; }
+.top nav a:hover { opacity: 1; }
+
+@keyframes flicker {
+  0%, 100% { opacity: .95; transform: translate(-50%, -50%) scale(1); }
+  17% { opacity: .78; transform: translate(-50%, -50%) scale(.97); }
+  29% { opacity: 1; transform: translate(-50%, -50%) scale(1.02); }
+  52% { opacity: .84; transform: translate(-50%, -50%) scale(.985); }
+  71% { opacity: .98; transform: translate(-50%, -50%) scale(1.01); }
+}
+@keyframes drift { from { transform: translate(0, 0); } to { transform: translate(var(--x, 30px), var(--y, -40px)); } }
+@keyframes blink { 0%, 100% { opacity: 0; } 40%, 60% { opacity: .9; } }
+@keyframes cue { 0% { transform: scaleY(0); opacity: 1; } 70% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
+
+/* the walk into the hollow: scroll moves the camera, only where scroll-driven animation exists */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .intro { height: 240svh; view-timeline: --intro block; }
+    .art { animation: dive linear both; animation-timeline: --intro; animation-range: contain 0% contain 100%; }
+    .title, .cue, .top { animation: leave linear both; animation-timeline: --intro; animation-range: contain 0% contain 30%; }
+    .veil { animation: fall linear both; animation-timeline: --intro; animation-range: contain 62% contain 100%; }
+  }
+}
+@keyframes dive { from { transform: scale(1); } to { transform: scale(2.6); } }
+@keyframes leave { to { opacity: 0; transform: translateY(-6svh); } }
+@keyframes fall { to { opacity: 1; } }
+
+/* ---------- Sections ---------- */
+main > section { padding: clamp(88px, 12vw, 168px) var(--gutter); }
+.wrap { max-width: 1180px; margin: 0 auto; }
+h2 {
+  margin: 0 0 .6em;
+  font-weight: 500;
+  font-size: clamp(2.4rem, 5vw, 3.9rem);
+  line-height: 1.02;
+  letter-spacing: -.01em;
+}
+p { margin: 0 0 1em; max-width: 34rem; text-wrap: pretty; }
+.lede { font-size: clamp(1.35rem, 2.3vw, 1.7rem); line-height: 1.45; }
+
+/* a painting hung in a gilt frame: two hairlines, the outer one standing off */
+.framed { position: relative; margin: 0; }
+.framed img { width: 100%; border: 1px solid rgba(201, 154, 82, .7); }
+.framed::before {
+  content: ""; position: absolute; inset: -9px;
+  border: 1px solid rgba(201, 154, 82, .35);
+  pointer-events: none;
+}
+.framed::after { content: ""; position: absolute; inset: 1px; box-shadow: inset 0 0 70px rgba(10, 21, 23, .55); pointer-events: none; }
+
+/* Games */
+.games { background: radial-gradient(60% 50% at 30% 55%, rgba(242, 180, 90, .07), transparent 70%), var(--night); }
+.game {
+  display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  gap: clamp(48px, 7vw, 104px); align-items: center;
+  margin-top: clamp(32px, 5vw, 64px);
+}
+.game .framed { box-shadow: 0 50px 120px -50px rgba(242, 180, 90, .35); }
+.game-logo { width: min(100%, 380px); margin: 0 0 26px -8px; }
+.hook { font-style: italic; font-size: clamp(1.45rem, 2.4vw, 1.8rem); line-height: 1.32; text-wrap: balance; }
+.muted { color: #cdd4c8; }
+.facts { display: flex; flex-wrap: wrap; gap: 14px 44px; margin: 30px 0 40px; padding-top: 22px; border-top: 1px solid rgba(201, 154, 82, .35); }
+.facts dt { font-size: 1rem; font-style: italic; color: var(--fog); }
+.facts dd { margin: 0; font-size: 1.3rem; font-weight: 500; }
+.button {
+  display: inline-block;
+  font: 500 1.2rem/1 var(--serif); letter-spacing: .03em;
+  color: var(--night); text-decoration: none;
+  padding: 17px 34px 18px;
+  background: linear-gradient(180deg, #f6d394, #d9a65a);
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(255, 230, 180, .4) inset, 0 10px 30px -10px rgba(242, 180, 90, .55);
+  transition: box-shadow .25s, filter .25s;
+}
+.button:hover { filter: brightness(1.06); box-shadow: 0 0 0 1px rgba(255, 230, 180, .55) inset, 0 12px 40px -8px rgba(242, 180, 90, .75); }
+
+/* Studio */
+.studio { background: linear-gradient(180deg, var(--night), var(--deep) 30%, var(--deep) 70%, var(--night)); }
+.studio .wrap { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(48px, 7vw, 104px); align-items: center; }
+
+/* Contact */
+.contact { text-align: center; padding-top: clamp(40px, 5vw, 72px) !important; }
+.contact .seal { width: 120px; margin: 0 auto 36px; filter: drop-shadow(0 10px 30px rgba(242, 180, 90, .25)); }
+.contact p { margin-left: auto; margin-right: auto; color: var(--fog); font-style: italic; font-size: 1.35rem; }
+.email {
+  display: inline-block; margin-top: 10px;
+  font-size: clamp(1.55rem, 5.6vw, 3.6rem); font-weight: 500; line-height: 1.15;
+  overflow-wrap: anywhere;
+  color: var(--parchment);
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em;
+  text-decoration-color: rgba(201, 154, 82, .6);
+  transition: color .25s, text-decoration-color .25s;
+}
+.email:hover { color: #fff4dc; text-decoration-color: var(--amber); }
+
+footer { padding: 36px var(--gutter) 44px; font-size: 1.05rem; color: var(--fog); border-top: 1px solid rgba(201, 154, 82, .18); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 36px; align-items: center; }
+footer a { color: var(--fog); text-underline-offset: .2em; }
+footer a:hover { color: var(--parchment); }
+footer .end { margin-left: auto; }
+
+@media (max-width: 900px) {
+  .game, .studio .wrap { grid-template-columns: 1fr; }
+  .studio .framed { order: 2; }
+}
+@media (max-aspect-ratio: 1/1) {
+  .title { top: clamp(96px, 15svh, 160px); }
+  .title h1 { width: min(86vw, 520px); }
+}
+@media (max-width: 520px) {
+  body { font-size: 1.1875rem; }
+  .top nav { font-size: 1.05rem; gap: 18px; }
+  .top .badge, .top .badge img { width: 40px; height: 40px; }
+  footer .end { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .lamp, .fly, .cue::after { animation: none !important; }
+  .fly { display: none; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#games">Skip to our games</a>
+
+<main>
+  <section class="intro" id="top" aria-label="Hollowlamp Studios">
+    <div class="stage">
+      <div class="art">
+        <picture>
+          <source media="(max-aspect-ratio: 1/1)" srcset="img/hero-tall-860.webp 860w, img/hero-tall-1290.webp 1290w" sizes="100vw">
+          <img src="img/hero-1600.webp" srcset="img/hero-1600.webp 1600w, img/hero-2560.webp 2560w" sizes="100vw"
+               width="2560" height="1429" fetchpriority="high"
+               alt="A giant old tree at night with a lantern glowing in a hollow at its base, and a stone stair leading down between its roots.">
+        </picture>
+        <div class="lamp" aria-hidden="true"></div>
+        <span class="fly" style="left:31%;top:52%;--t:12s;--x:40px;--y:-50px" aria-hidden="true"></span>
+        <span class="fly" style="left:38%;top:68%;--t:9s;--d:-3s;--x:-30px;--y:-26px" aria-hidden="true"></span>
+        <span class="fly" style="left:61%;top:50%;--t:13s;--d:-6s;--x:-36px;--y:-44px" aria-hidden="true"></span>
+        <span class="fly" style="left:67%;top:64%;--t:10s;--d:-2s;--x:28px;--y:-30px" aria-hidden="true"></span>
+        <span class="fly" style="left:55%;top:76%;--t:14s;--d:-8s;--x:-20px;--y:-60px" aria-hidden="true"></span>
+        <span class="fly" style="left:24%;top:72%;--t:11s;--d:-5s;--x:34px;--y:-36px" aria-hidden="true"></span>
+        <span class="fly" style="left:76%;top:56%;--t:12s;--d:-9s;--x:-26px;--y:-48px" aria-hidden="true"></span>
+      </div>
+      <div class="shade" aria-hidden="true"></div>
+      <div class="veil" aria-hidden="true"></div>
+
+      <header class="top">
+        <a class="badge" href="#top" aria-label="Hollowlamp Studios, back to top"><img src="img/emblem-160.webp" width="160" height="160" alt=""></a>
+        <nav aria-label="Sections">
+          <a href="#games">Games</a>
+          <a href="#studio">Studio</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </header>
+
+      <div class="title">
+        <h1><img src="img/wordmark.webp" width="1800" height="375" alt="Hollowlamp Studios"></h1>
+        <p class="motto">Small studio. Deep worlds.</p>
+      </div>
+      <a class="cue" href="#games">Step inside</a>
+    </div>
+  </section>
+
+  <section class="games" id="games" aria-labelledby="games-title">
+    <div class="wrap">
+      <h2 id="games-title">Our games</h2>
+      <article class="game">
+        <figure class="framed">
+          <img src="img/hero.webp" width="960" height="960" loading="lazy"
+               alt="A hero with a pickaxe and sword faces a huge cave creature with glowing purple eyes, above rivers of molten gold.">
+        </figure>
+        <div>
+          <img class="game-logo" src="img/logo.webp" width="900" height="268" loading="lazy" alt="Gloomvein">
+          <p class="hook">The gold runs deeper than anyone has dug. So does whatever is guarding it.</p>
+          <p class="muted">An idle mining RPG for Android. Dig down through eight layers, gear up one of four heroes and take on the bosses waiting in the deep. Ads only play when you choose to watch one.</p>
+          <dl class="facts">
+            <div><dt>Platform</dt><dd>Android</dd></div>
+            <div><dt>Price</dt><dd>Free</dd></div>
+            <div><dt>Status</dt><dd>Early access, coming soon</dd></div>
+          </dl>
+          <a class="button" href="https://gloomvein.com">Visit gloomvein.com</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="studio" id="studio" aria-labelledby="studio-title">
+    <div class="wrap">
+      <figure class="framed">
+        <img src="img/workshop-1600.webp" srcset="img/workshop-900.webp 900w, img/workshop-1600.webp 1600w"
+             sizes="(max-width: 900px) 100vw, 60vw" width="1600" height="1195" loading="lazy"
+             alt="A lantern-lit workshop inside a hollow tree: a desk with a quill, a pickaxe, a jar of gold ore and old books, with cave maps and creature sketches pinned to the wall.">
+      </figure>
+      <div>
+        <h2 id="studio-title">The studio</h2>
+        <p class="lede">Hollowlamp Studios is an independent game studio. We make the kind of games we want to play ourselves: easy to pick up, with more underneath than you first expect.</p>
+        <p class="muted">We keep our games fair to the people who play them. Nothing is hidden behind random paid boxes, and you never have to sit through an ad you did not ask for.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact" aria-labelledby="contact-title">
+    <div class="wrap">
+      <img class="seal" src="img/emblem-512.webp" width="512" height="512" loading="lazy" alt="">
+      <h2 id="contact-title">Get in touch</h2>
+      <p>Players, press and partners: we read every message.</p>
+      <a class="email" href="mailto:hollowlampstudios@gmail.com">hollowlampstudios@gmail.com</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Hollowlamp Studios</span>
+    <span>No cookies, no trackers.</span>
+    <a class="end" href="fonts/OFL.txt">Font: EB Garamond (OFL)</a>
+  </div>
+</footer>
+</body>
+</html>
