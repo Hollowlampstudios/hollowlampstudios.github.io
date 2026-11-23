@@ -196,6 +196,9 @@ p { margin: 0 0 1em; max-width: 34rem; text-wrap: pretty; }
   transition: box-shadow .25s, filter .25s;
 }
 .button:hover { filter: brightness(1.06); box-shadow: 0 0 0 1px rgba(255, 230, 180, .55) inset, 0 12px 40px -8px rgba(242, 180, 90, .75); }
+.actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+.button.quiet { color: var(--amber); background: transparent; box-shadow: 0 0 0 1px rgba(242, 180, 90, .6) inset; }
+.button.quiet:hover { color: #fff4dc; filter: none; box-shadow: 0 0 0 1px rgba(255, 230, 180, .9) inset; }
 
 /* Studio */
 .studio { background: linear-gradient(180deg, var(--night), var(--deep) 30%, var(--deep) 70%, var(--night)); }
@@ -302,7 +305,10 @@ footer .end { margin-left: auto; }
             <div><dt>Price</dt><dd>Free</dd></div>
             <div><dt>Status</dt><dd>Early access, coming soon</dd></div>
           </dl>
-          <a class="button" href="https://gloomvein.com">Visit gloomvein.com</a>
+          <div class="actions">
+            <a class="button" href="https://gloomvein.com">Visit gloomvein.com</a>
+            <a class="button quiet" href="https://ko-fi.com/gloomvein">Support Gloomvein on Ko-fi</a>
+          </div>
         </div>
       </article>
     </div>
